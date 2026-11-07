@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veronika's Birthday Games</title>
+
+<style>
+:root{
+    --bg:#f8f6f0;
+    --card-bg:#FCFAF5;
+    --text:#121212;
+    --secondary:#666;
+    --border:#e2e2e2;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;
+	padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* =========================
+   STYLE HEADER
+   ========================= */
+
+.topbar{
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    font-size:1.15rem;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.hero{
+    text-align:center;
+    padding:42px 24px;
+}
+
+.hero h1{
+    font-size:clamp(3rem,6vw,4.0rem);
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:#666;
+    font-size:1.05rem;
+    font-weight:500;
+}
+
+/* =========================
+   GAME CARDS
+   ========================= */
+
+.games{
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 20px 50px;
+    display:grid;
+    gap:24px;
+}
+
+.game-card{
+    min-height:220px;
+	display:flex;
+	align-items:center;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    position:relative;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.game-card:hover{
+    transform:translateY(-3px);
+    border-color:#d6d6d6;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.04),
+        0 10px 30px rgba(0,0,0,.08);
+}
+
+.game-card:hover .preview{
+    transform:scale(1.03);
+}
+
+.game-card:hover .play-btn{
+    background:#5a5a5a;
+}
+
+.wordle-card{
+    border-left:6px solid #6aaa64;
+}
+
+.connections-card{
+    border-left:6px solid #b0c4ef;
+}
+
+.strands-card{
+    border-left:6px solid #f9df6d;
+}
+
+.preview{
+    width:320px;
+    min-width:320px;
+    height:170px;
+
+    flex-shrink:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#FCFAF5;
+    transition:transform .3s ease;
+}
+
+.info{
+    flex:1;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.game-title{
+    font-family:Georgia, serif;
+    font-size:2rem;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.game-description{
+    color:var(--secondary);
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+.play-btn{
+    display:inline-flex;
+    align-items:center;
+    width:fit-content;
+    background:#454545;
+    color:white;
+    padding:10px 20px;
+	border:none;
+    border-radius:8px;
+    font-size:1.05rem;
+    font-weight:bold;
+	font-family:inherit;
+	cursor:pointer;
+    transition:
+        background .2s ease,
+        transform .2s ease,
+		background-color .15s ease;
+}
+
+/* =========================
+   WORDLE PREVIEW
+   ========================= */
+
+.mini-wordle{
+    display:grid;
+    grid-template-columns:repeat(8,24px);
+    gap:3px;
+}
+
+.wordle-tile{
+    width:26px;
+    height:26px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    font-size:.8rem;
+    font-weight:700;
+    border-radius:2px;
+	transition:transform .2s ease;
+}
+
+.game-card:hover .wordle-tile{
+    transform:translateY(-1px);
+}
+
+.correct{
+    background:#6aaa64;
+}
+
+.present{
+    background:#c9b458;
+}
+
+.absent{
+    background:#787c7e;
+}
+
+/* =========================
+   CONNECTIONS PREVIEW
+   ========================= */
+
+.mini-connections{
+    width:240px;
+	max-width:90%;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.conn-row{
+	height:28px;
+    border-radius:6px;
+	padding:0 12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:.6rem;
+    font-weight:700;
+    letter-spacing:.2px;
+    color:#222;
+	
+	transition:transform .2s ease;
+}
+
+.game-card:hover .conn-row:nth-child(1){
+    transform:translateX(-2px);
+}
+
+.game-card:hover .conn-row:nth-child(2){
+    transform:translateX(2px);
+}
+
+.game-card:hover .conn-row:nth-child(3){
+    transform:translateX(-2px);
+}
+
+.game-card:hover .conn-row:nth-child(4){
+    transform:translateX(2px);
+}
+
+.conn-yellow{
+    background:#f9df6d;
+}
+
+.conn-green{
+    background:#a0c35a;
+}
+
+.conn-blue{
+    background:#b0c4ef;
+}
+
+.conn-purple{
+    background:#ba81c5;
+}
+
+/* =========================
+   STRANDS PREVIEW
+   ========================= */
+
+.mini-strands{
+    display:grid;
+    grid-template-columns:repeat(6,28px);
+    gap:2px;
+}
+
+.mini-strands div{
+    width:26px;
+    height:26px;
+
+    border-radius:50%;
+
+    background:#f9df6d;
+    color:black;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:700;
+    font-size:.85rem;
+	
+	transition:
+        transform .2s ease,
+        background-color .2s ease;
+}
+
+.mini-strands .path{
+    background:#6aaa64;
+    color:white;
+}
+
+.game-card:hover .mini-strands .path{
+    transform:scale(1.08);
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width:768px){
+
+    .game-card{
+        flex-direction:column;
+		min-height:auto;
+    }
+
+    .preview{
+        width:100%;
+        min-width:0;
+        height:180px;
+        padding:12px;
+    }
+
+    .info{
+        padding:20px 24px 24px;
+    }
+
+    .game-title{
+        font-size:1.8rem;
+    }
+
+    .mini-wordle{
+        grid-template-columns:repeat(8,22px);
+        gap:2px;
+    }
+
+    .wordle-tile{
+        width:22px;
+        height:22px;
+        font-size:.7rem;
+    }
+
+    .mini-connections{
+        width:min(280px, 95%);
+    }
+
+    .conn-row{
+        font-size:.6rem;
+        height:28px;
+    }
+
+    .mini-strands{
+        grid-template-columns:repeat(6,24px);
+        gap:3px;
+    }
+
+    .mini-strands div{
+        width:24px;
+        height:24px;
+        font-size:.75rem;
+    }
+	
+	.hero{
+        padding:32px 20px;
+    }
+
+    .hero h1{
+        font-size:2.5rem;
+        line-height:1;
+    }
+
+    .hero p{
+        font-size:0.95rem;
+    }
+	
+	.game-card:active{
+		transform:scale(.985);
+	}
+	
+	.game-card:hover .preview{
+        transform:scale(1.03);
+    }
+	
+	.game-card:hover .play-btn{
+		background:#5a5a5a;
+	}
+	.game-card:hover .wordle-tile{
+		transform:translateY(-1px);
+	}
+	
+	.game-card:hover .conn-row:nth-child(1){
+    transform:translateX(-2px);
+	}
+
+	.game-card:hover .conn-row:nth-child(2){
+		transform:translateX(2px);
+	}
+
+	.game-card:hover .conn-row:nth-child(3){
+		transform:translateX(-2px);
+	}
+
+	.game-card:hover .conn-row:nth-child(4){
+		transform:translateX(2px);
+	}
+}
+
+.game-meta{
+    display:inline-block;
+    margin-bottom:12px;
+
+    font-size:.75rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+
+    color:#666;
+}
+
+.footer{
+    text-align:center;
+    color:#888;
+    padding:30px;
+    font-size:.9rem;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="hero">
+        <h1>Veronika's Birthday Games</h1>
+        <p>🎁 Solve All Three Puzzles To Unlock Your Presents! 🎁</p>
+    </div>
+
+</header>
+
+<main class="games">
+
+    <!-- WORDLE -->
+
+    <a href="wordle.html" class="game-card wordle-card">
+
+        <div class="preview">
+
+            <div class="mini-wordle">
+				
+				<!-- GAMESHOW -->
+				<div class="wordle-tile absent">G</div>
+				<div class="wordle-tile present">A</div>
+				<div class="wordle-tile absent">M</div>
+				<div class="wordle-tile present">E</div>
+				<div class="wordle-tile absent">S</div>
+				<div class="wordle-tile absent">H</div>
+				<div class="wordle-tile present">O</div>
+				<div class="wordle-tile absent">W</div>
+				
+				<!-- WELLNESS -->
+				<div class="wordle-tile absent">W</div>
+				<div class="wordle-tile correct">E</div>
+				<div class="wordle-tile absent">L</div>
+				<div class="wordle-tile absent">L</div>
+				<div class="wordle-tile present">N</div>
+				<div class="wordle-tile present">E</div>
+				<div class="wordle-tile absent">S</div>
+				<div class="wordle-tile absent">S</div>
+
+				<!-- BIRTHDAY -->
+				<div class="wordle-tile absent">B</div>
+				<div class="wordle-tile present">I</div>
+				<div class="wordle-tile correct">R</div>
+				<div class="wordle-tile absent">T</div>
+				<div class="wordle-tile absent">H</div>
+				<div class="wordle-tile absent">D</div>
+				<div class="wordle-tile present">A</div>
+				<div class="wordle-tile absent">Y</div>
+
+				<!-- VERONIKA -->
+				<div class="wordle-tile correct">V</div>
+				<div class="wordle-tile correct">E</div>
+				<div class="wordle-tile correct">R</div>
+				<div class="wordle-tile correct">O</div>
+				<div class="wordle-tile correct">N</div>
+				<div class="wordle-tile correct">I</div>
+				<div class="wordle-tile correct">K</div>
+				<div class="wordle-tile correct">A</div>
+
+			</div>
+
+        </div>
+
+        <div class="info">
+
+            <div class="game-title">Wordle</div>
+			<div class="game-meta">
+				Birthday Edition
+			</div>
+
+            <div class="game-description">
+                Guess The Word In Nine Tries Or Fewer.
+            </div>
+
+            <div class="play-btn">Play</div>
+
+        </div>
+
+    </a>
+
+    <!-- CONNECTIONS -->
+
+    <a href="connections.html" class="game-card connections-card">
+
+        <div class="preview">
+
+            <div class="mini-connections">
+
+                <div class="conn-row conn-yellow">
+                    SMART • SEXY • COOL • STRONG
+                </div>
+
+                <div class="conn-row conn-green">
+                    GRAZ • GUANGZHOU • VIENNA • VALENCIA
+                </div>
+
+                <div class="conn-row conn-blue">
+                    WINE • BEER • TEA • WATER
+                </div>
+
+                <div class="conn-row conn-purple">
+                    PEACH • EGGPLANT • CHERRIES • TULIP
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <div class="game-title">Connections</div>
+			<div class="game-meta">
+				Birthday Edition
+			</div>
+
+            <div class="game-description">
+                Find The Seven Groups Of Four.
+            </div>
+
+            <div class="play-btn">Play</div>
+
+        </div>
+
+    </a>
+
+    <!-- STRANDS -->
+
+    <a href="strands.html" class="game-card strands-card">
+
+        <div class="preview">
+
+            <div class="mini-strands">
+
+                <div>A</div>
+                <div class="path">B</div>
+                <div class="path">I</div>
+                <div class="path">R</div>
+                <div>S</div>
+				<div>M</div>
+
+                <div>M</div>
+                <div>G</div>
+                <div>S</div>
+                <div class="path">T</div>
+                <div>A</div>
+				<div>R</div>
+
+                <div>A</div>
+                <div>N</div>
+				<div>T</div>
+                <div class="path">H</div>
+                <div>T</div>
+				<div>Y</div>
+
+                <div>Z</div>
+                <div>O</div>
+				<div>R</div>
+                <div class="path">D</div>
+                <div>E</div>
+                <div>X</div>
+
+                <div>I</div>
+                <div>N</div>
+				<div>G</div>
+                <div class="path">A</div>
+                <div class="path">Y</div>
+                <div>S</div>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <div class="game-title">Strands</div>
+			<div class="game-meta">
+				Birthday Edition
+			</div>
+
+            <div class="game-description">
+                Discover Theme Words Hidden In The Grid And Uncover The Spangram.
+            </div>
+
+            <div class="play-btn">Play</div>
+
+        </div>
+
+    </a>
+
+</main>
+
+<footer class="footer">
+    ❤️ Made Especially For Veronika ❤️
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Connections</title>
+
+<style>
+:root{
+    --red:#ff595e;
+    --orange:#ff924c;
+    --yellow:#ffca3a;
+    --green:#8ac926;
+    --blue:#1982c4;
+    --indigo:#6a4c93;
+    --violet:#c77dff;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#f8f6f0;
+    color:#222;
+    text-align:center;
+	overflow-x:hidden;
+	animation:pageFade 0.8s ease-out;
+}
+
+@keyframes pageFade{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+}
+
+h1{
+ margin:0;
+ font-size:42px;
+ font-weight:700;
+}
+
+.subtitle{
+ margin:18px 0;
+ font-weight:700;
+ color:#555;
+}
+
+#status{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:15px;
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+#solved{
+    max-width:1100px;
+    margin:0 auto 20px;
+}
+
+.category{
+    color:white;
+	box-shadow:
+        0 6px 20px rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.25);
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+	animation: revealCategory .35s ease;
+	animation:slideDown .4s ease;
+}
+
+.category-name{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.category-words{
+    font-size:16px;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.tile{
+    background:white;
+    box-shadow:
+        0 2px 4px rgba(0,0,0,.06),
+        0 8px 24px rgba(0,0,0,.04);
+
+    border:1px solid rgba(0,0,0,.05);
+    border-radius:14px;
+	min-height:75px;
+    min-height:90px;
+    padding:12px;
+
+    display:flex;
+	position:relative;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+    font-size:18px;
+    font-weight:700;
+    line-height:1.3;
+
+    cursor:pointer;
+    user-select:none;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    transition:.15s;
+	
+	-webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+	
+	overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+.tile:hover{
+    transform:translateY(-2px);
+}
+
+.tile.selected{
+    background:#4A4A4A;
+    color:white;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 6px 16px rgba(0,0,0,.25);
+}
+
+.controls{
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    border-radius:12px;
+    padding:12px 20px;
+    margin:5px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#submitBtn{
+    background:#1982c4;
+    color:white;
+}
+
+#shuffleBtn{
+    background:#666;
+    color:white;
+}
+
+#hintBtn{
+    background:#d4a017;
+    color:white;
+    border:none;
+    border-radius:12px;
+    padding:12px 20px;
+    margin:5px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+	transition:
+        transform .15s,
+        background .15s;
+}
+
+#hintBtn:hover{
+    transform:translateY(-1px);
+    background:#bf9214;
+}
+
+#submitBtn:hover{
+    transform:translateY(-1px);
+    background:#156AA1;
+}
+
+#shuffleBtn:hover{
+    transform:translateY(-1px);
+    background:#555555;
+}
+
+#clearBtn:hover{
+    transform:translateY(-1px);
+    background:#343434;
+}
+
+#clearBtn{
+    background:#8C8C8C;
+    color:white;
+}
+
+#message{
+    margin-top:18px;
+    font-size:20px;
+    font-weight:bold;
+    min-height:40px;
+}
+
+.win{
+    background:
+        linear-gradient(
+            90deg,
+            #ff595e,
+            #ff924c,
+            #ffca3a,
+            #8ac926,
+            #1982c4,
+            #6a4c93,
+            #c77dff
+        );
+    color:white;
+    padding:15px 25px;
+    border-radius:999px;
+    display:inline-block;
+}
+
+@media (max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .board{
+        gap:8px;
+    }
+	
+	.row{
+        grid-template-columns:repeat(9,34px);
+    }
+
+    .tile{
+        min-height:70px;
+        padding:8px 4px;
+        font-size:14px;
+        line-height:1.2;
+        border-radius:10px;
+    }
+
+    .controls{
+		display:flex;
+		flex-wrap:wrap;
+		justify-content:center;
+		gap:8px;
+	}
+
+	.controls button{
+		width:auto;
+	}
+
+    .category-name{
+        font-size:18px;
+    }
+
+    .category-words{
+        font-size:14px;
+    }
+
+    #message{
+        font-size:18px;
+    }
+	
+    #keyboard{
+        width:100%;
+        max-width:420px;
+		margin:25px auto 0;
+        gap:6px;
+    }
+
+    .keyboard-row{
+        display:flex;
+        justify-content:center;
+        gap:3px;
+    }
+
+    .key{
+        width:calc((100vw - 50px) / 11);
+        min-width:0;
+        max-width:38px;
+
+        height:48px;
+
+        padding:0;
+
+        font-size:14px;
+    }
+
+    .wide-key{
+        max-width:none;
+        width:60px;
+
+        font-size:11px;
+    }
+	
+	.letterBox{
+        width:24px;
+        height:36px;
+
+        font-size:18px;
+    }
+
+    .wordGroup{
+        gap:2px;
+    }
+
+    #phraseBoxes{
+        gap:10px;
+    }
+	
+	#codePuzzle{
+        font-size:26px;
+    }
+
+    #codePrompt{
+        font-size:20px;
+        padding:0 10px;
+    }
+
+    #codeMistakes{
+        font-size:16px;
+    }
+}
+
+html,
+body{
+    overflow-x:hidden;
+}
+
+@keyframes shake {
+    0%,100% { transform:translateX(0); }
+    20% { transform:translateX(-5px); }
+    40% { transform:translateX(5px); }
+    60% { transform:translateX(-5px); }
+    80% { transform:translateX(5px); }
+}
+
+@keyframes correctShake {
+    0%,100% { transform:translateY(0); }
+    15% { transform:translateY(-6px); }
+    30% { transform:translateY(6px); }
+    45% { transform:translateY(-4px); }
+    60% { transform:translateY(4px); }
+    75% { transform:translateY(-2px); }
+}
+
+.tile.correct{
+    animation:correctShake 0.6s ease;
+    background:#59a14f !important;
+    color:white;
+	box-shadow:
+        0 0 0 3px rgba(89,161,79,.25),
+        0 0 20px rgba(89,161,79,.4);
+}
+
+.tile.shake{
+    animation: shake 0.45s ease;
+}
+
+.tile.removing{
+    animation: solvedSlideUp 0.6s ease forwards;
+}
+
+@keyframes solvedSlideUp{
+    0%{
+        transform:translateY(0);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-60px);
+        opacity:0;
+    }
+}
+
+@keyframes slideDown{
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.board{
+    transition:all .35s ease;
+}
+
+@keyframes revealCategory{
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.tile.hinted::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+
+    border:4px solid var(--hint-color);
+    border-radius:inherit;
+	outline-offset:-4px;
+	
+	box-shadow:
+        0 0 0 3px rgba(255,255,255,.6),
+        0 0 12px var(--hint-color);
+
+    pointer-events:none;
+
+    animation:hintPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes hintPulse{
+ 0%,100%{transform:scale(1);}
+ 50%{transform:scale(1.01);}
+}
+
+.tile.hinted.selected{
+    outline:4px solid var(--hint-color);
+}
+
+#codePuzzle{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    max-width:900px;
+    margin:30px auto;
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.08);
+}
+
+#codePuzzleTitle{
+    font-size:32px;
+	font-weight:bold;
+    margin-bottom:20px;
+	text-align:center;
+    color:#454545;
+}
+
+#codePrompt{
+    font-size:24px;
+    color:#454545;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+#codeMistakes{
+    font-size:18px;
+    color:#454545;
+    text-align:center;
+    margin-bottom:30px;
+}
+
+#victoryOverlay{
+    display:flex;
+	position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    align-items:center;
+	justify-content:center;
+    z-index:1000;
+	padding:20px;
+}
+
+#victoryModal{
+    background:
+        linear-gradient(
+            180deg,
+            #FFFDF8 0%,
+            #FAF3E0 100%
+        );
+    color:#222;
+    width:min(90%,500px);
+    padding:30px 24px;
+    border-radius:20px;
+    text-align:center;
+	position:relative;
+    overflow:hidden;
+	box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+	animation:
+        modalPop .35s ease-out;
+}
+
+@keyframes modalPop{
+
+    0%{
+        transform:scale(.7);
+        opacity:0;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+#confettiCanvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:999;
+}
+
+#victoryModal button{
+    background:#454545;
+    color:white;
+	width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+#victoryModal button:hover{
+    background:#5A5A5A;
+}
+
+.victoryModal h2{
+    margin-top:0;
+	color:#222;
+}
+
+.victoryModal p{
+    color:#222;
+}
+
+#phraseBoxes{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:18px;
+    margin:25px auto;
+    max-width:900px;
+}
+
+.wordGroup{
+    display:flex;
+    gap:4px;
+    flex-wrap:nowrap;
+    margin-bottom:8px;
+}
+
+.letterBox{
+
+    width:34px;
+    height:46px;
+
+    background:white;
+
+    border-radius:6px;
+
+    border:1px solid #DDD;
+
+    border-bottom:3px solid #454545;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+    font-weight:bold;
+}
+
+.spaceBox{
+
+    width:20px;
+}
+
+#keyboard{
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.keyboard-row{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+}
+
+.key{
+    min-width:42px;
+    height:58px;
+    border:none;
+	padding:1px 6px;
+    border-radius:4px;
+    background:#818384;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+	box-shadow:
+        inset 0 -2px rgba(0,0,0,.15);
+    transition:
+        background .15s ease,
+        transform .08s ease;
+}
+
+.key:hover{
+    background:#6E7072;
+}
+
+.key:active{
+    transform:scale(.95);
+	transform:translateY(2px);
+    box-shadow:none;
+}
+
+.wide-key{
+    min-width:62px;
+}
+
+@keyframes phraseShake{
+
+    0%,100%{
+        transform:translateX(0);
+    }
+
+    20%{
+        transform:translateX(-8px);
+    }
+
+    40%{
+        transform:translateX(8px);
+    }
+
+    60%{
+        transform:translateX(-8px);
+    }
+
+    80%{
+        transform:translateX(8px);
+    }
+
+}
+
+#phraseBoxes.shake{
+    animation:phraseShake .6s ease;
+}
+
+.hidden{
+    display:none !important;
+}
+
+button:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+</style>
+</head>
+<body>
+
+<h1>CONNECTIONS</h1>
+<div class="subtitle"></div>
+
+<div id="status">
+    <div>❌ Mistakes: <span id="mistakes">0</span></div>
+    <div>💡 Hints Used: <span id="hintsUsed">0</span></div>
+    <div>🔍 Hints Remaining: <span id="hintsRemaining">7</span></div>
+</div>
+
+<div id="solved"></div>
+
+<div class="board" id="board"></div>
+
+<div class="controls">
+    <button id="shuffleBtn">Shuffle</button>
+    <button id="clearBtn">Deselect All</button>
+	<button id="submitBtn">Submit</button>
+	<button id="hintBtn">Hint</button>
+</div>
+
+<div id="message"></div>
+
+<div id="codePuzzle" style="display:none; margin-top:30px;">
+	
+	<div id="codePuzzleTitle">
+		But...
+	</div>
+	
+	<div id="codePrompt">
+		🌈 What Could It All Mean? 🌈
+	</div>
+
+    <div id="codeMistakes">
+        ❌ Mistakes: <span id="codeMistakeCount">0</span>
+    </div>
+
+    <div id="phraseBoxes"></div>
+
+    <div id="keyboard"></div>
+
+</div>
+
+<div id="victoryOverlay" class="hidden">
+    <div id="victoryModal">
+		<canvas id="confettiCanvas"></canvas>
+        <h2>🎉 Congratulations! 🎉</h2>
+        <p>You Solved Both Puzzles.</p>
+        <p>
+            <strong id="finalPhrase"></strong>
+        </p>
+		<button id="admireBtn">
+		  ✨ Admire Puzzle ✨
+		</button>
+    </div>
+</div>
+
+<script>
+
+const groups = [
+
+{
+    name:"The Places We Have Been To",
+    color:"#ff595e",
+    words:["Corcovado","Sahara","Kalahari","Komodo"]
+},
+
+{
+    name:"Quality Time",
+    color:"#ff924c",
+    words:["Sexy Stuff","Wellness","Candlelight Dinner","Movie Night"]
+},
+
+{
+    name:"Of Course You Like It!",
+    color:"#ffca3a",
+    words:["Eyes","Ass","Laugh","Brain"]
+},
+
+{
+    name:"Your Travel List",
+    color:"#8ac926",
+    words:["Atacama","Zhangjiajie","Serengeti","Highlands"]
+},
+
+{
+    name:"Photography On Our Walls",
+    color:"#1982c4",
+    words:["Lioness","Ras Mohammed","Helm of Hades","Himba"]
+},
+
+{
+    name:"Is It Enough To Save Us?",
+    color:"#6a4c93",
+    words:["Renewable Energy","Conservation","Recycling","Biodiversity"]
+},
+
+{
+    name:"Singular Forms Of Series We Watched Together",
+    color:"#c77dff",
+    words:["Bone","Suit","Friend","Scrub"]
+}
+
+];
+
+let selected = [];
+let solvedGroups = [];
+let mistakes = 0;
+let hintedGroups = new Map();
+let usedHintGroups = new Set();
+let MAX_HINTS = 7;
+let hintsUsed = 0;
+let submissionLocked = false;
+
+const board = document.getElementById("board");
+const solvedDiv = document.getElementById("solved");
+const message = document.getElementById("message");
+
+let allWords = [];
+
+const CODE_PHRASE =
+"The Quality Of Your Photography Is Singular";
+
+let codePosition = 0;
+let codeMistakes = 0;
+let enteredPhrase = "";
+
+groups.forEach((group,index)=>{
+    group.words.forEach(word=>{
+        allWords.push({
+            word:word,
+            group:index
+        });
+    });
+});
+
+function shuffle(array){
+    for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],array[j]]=[array[j],array[i]];
+    }
+}
+
+shuffle(allWords);
+
+function shakeSelectedTiles(){
+
+    document.querySelectorAll(".tile.selected").forEach(tile => {
+
+        tile.classList.add("shake");
+
+        tile.addEventListener("animationend", () => {
+            tile.classList.remove("shake");
+        }, { once:true });
+
+    });
+
+}
+
+function renderBoard(){
+
+    board.innerHTML="";
+	
+	const hintWords = [];
+
+	hintedGroups.forEach(words=>{
+		hintWords.push(...words);
+	});
+
+    allWords.forEach(item=>{
+
+        if(solvedGroups.includes(item.group)){
+            return;
+        }
+
+        const tile=document.createElement("div");
+        tile.className="tile";
+        tile.textContent=item.word;
+
+        if(selected.includes(item.word)){
+            tile.classList.add("selected");
+        }
+
+        tile.addEventListener("click",()=>{
+            toggle(item.word);
+        });
+		
+		if(hintWords.includes(item.word)){
+			tile.classList.add("hinted");
+			tile.style.setProperty(
+				"--hint-color",
+				groups[item.group].color
+			);
+		}
+
+        board.appendChild(tile);
+
+    });
+
+}
+
+function toggle(word){
+
+    if(selected.includes(word)){
+        selected=selected.filter(w=>w!==word);
+    }else{
+        if(selected.length<4){
+            selected.push(word);
+        }
+    }
+
+    renderBoard();
+}
+
+function revealGroup(index){
+
+    hintedGroups.delete(index);
+	
+	solvedGroups.push(index);
+
+    const group=groups[index];
+
+    const div=document.createElement("div");
+    div.className="category";
+    div.style.background=group.color;
+
+    div.innerHTML=`
+        <div class="category-name">${group.name}</div>
+        <div class="category-words">${group.words.join(" • ")}</div>
+    `;
+
+    solvedDiv.appendChild(div);
+}
+
+function animateCorrectTiles(){
+
+    return new Promise(resolve => {
+
+        const selectedTiles =
+            document.querySelectorAll(".tile.selected");
+
+        selectedTiles.forEach(tile=>{
+            tile.classList.add("correct");
+        });
+
+        setTimeout(()=>{
+
+            selectedTiles.forEach(tile=>{
+                tile.classList.remove("correct");
+                tile.classList.add("removing");
+            });
+
+            setTimeout(resolve,600);
+
+        },600);
+
+    });
+
+}
+
+function updateHintCounters(){
+
+    document.getElementById("hintsUsed").textContent =
+        hintsUsed;
+
+    document.getElementById("hintsRemaining").textContent =
+        MAX_HINTS - hintsUsed;
+
+}
+
+function startCodePhrasePuzzle(){
+
+    document.getElementById("codePuzzle")
+        .style.display = "block";
+
+    buildPhraseBoxes();
+    buildKeyboard();
+}
+
+function buildPhraseBoxes(){
+
+    const container =
+        document.getElementById("phraseBoxes");
+
+    container.innerHTML = "";
+
+    const words = CODE_PHRASE.split(" ");
+
+    words.forEach(word => {
+
+        const wordContainer =
+            document.createElement("div");
+
+        wordContainer.className = "wordGroup";
+
+        [...word].forEach(() => {
+
+            const box =
+                document.createElement("div");
+
+            box.className = "letterBox";
+
+            wordContainer.appendChild(box);
+
+        });
+
+        container.appendChild(wordContainer);
+
+    });
+
+}
+
+function buildKeyboard(){
+
+    const keyboard =
+        document.getElementById("keyboard");
+
+    keyboard.innerHTML = "";
+
+    const rows = [
+        ["Q","W","E","R","T","Y","U","I","O","P"],
+        ["A","S","D","F","G","H","J","K","L"]
+    ];
+
+    rows.forEach(row => {
+
+        const rowDiv =
+            document.createElement("div");
+
+        rowDiv.className = "keyboard-row";
+
+        row.forEach(letter => {
+
+            const key =
+                document.createElement("button");
+
+            key.className = "key";
+            key.type = "button";
+            key.textContent = letter;
+
+            key.addEventListener(
+                "click",
+                () => pressLetter(letter)
+            );
+
+            rowDiv.appendChild(key);
+
+        });
+
+        keyboard.appendChild(rowDiv);
+
+    });
+
+    const thirdRow =
+        document.createElement("div");
+
+    thirdRow.className =
+        "keyboard-row";
+
+    const enter =
+        document.createElement("button");
+
+    enter.className =
+        "key wide-key";
+
+    enter.type = "button";
+    enter.textContent = "ENTER";
+
+    enter.addEventListener(
+        "click",
+        submitCodePhrase
+    );
+
+    thirdRow.appendChild(enter);
+
+    ["Z","X","C","V","B","N","M"]
+        .forEach(letter => {
+
+        const key =
+            document.createElement("button");
+
+        key.className = "key";
+        key.type = "button";
+        key.textContent = letter;
+
+        key.addEventListener(
+            "click",
+            () => pressLetter(letter)
+        );
+
+        thirdRow.appendChild(key);
+
+    });
+
+    const backspace =
+        document.createElement("button");
+
+    backspace.className =
+        "key wide-key";
+
+    backspace.type = "button";
+    backspace.textContent = "⌫";
+
+    backspace.addEventListener(
+        "click",
+        deleteLetter
+    );
+
+    thirdRow.appendChild(backspace);
+
+    keyboard.appendChild(thirdRow);
+}
+
+function pressLetter(letter){
+
+    const target =
+        CODE_PHRASE.replace(/ /g,"");
+
+    enteredPhrase += letter;
+
+    updateEnteredLetters();
+
+}
+
+function submitCodePhrase(){
+
+    const answer =
+        CODE_PHRASE
+            .replace(/ /g,"")
+            .toUpperCase();
+
+    if(
+        enteredPhrase.length !==
+        answer.length
+    ){
+        return;
+    }
+
+    checkCodePhrase();
+}
+
+function updateEnteredLetters(){
+
+    const boxes =
+        document.querySelectorAll(".letterBox");
+
+    boxes.forEach(box=>{
+        box.textContent = "";
+    });
+
+    enteredPhrase
+        .split("")
+        .forEach((letter,index)=>{
+
+            if(boxes[index]){
+                boxes[index].textContent =
+                    letter;
+            }
+
+        });
+}
+
+function deleteLetter(){
+
+    if(enteredPhrase.length === 0){
+        return;
+    }
+
+    enteredPhrase =
+        enteredPhrase.slice(0,-1);
+
+    updateEnteredLetters();
+}
+
+function checkCodePhrase(){
+
+    const entered =
+        enteredPhrase.toUpperCase();
+
+    const answer =
+        CODE_PHRASE
+            .replace(/ /g,"")
+            .toUpperCase();
+
+    if(entered === answer){
+
+        showVictory();
+
+    }else{
+
+        codeMistakes++;
+
+        document
+            .getElementById(
+                "codeMistakeCount"
+            ).textContent =
+            codeMistakes;
+
+        const boxes =
+            document.getElementById(
+                "phraseBoxes"
+            );
+
+        boxes.classList.add("shake");
+
+        setTimeout(()=>{
+
+            boxes.classList.remove(
+                "shake"
+            );
+
+            enteredPhrase="";
+
+            document
+                .querySelectorAll(
+                    ".letterBox"
+                )
+                .forEach(box=>{
+
+                    box.textContent="";
+                });
+
+        },700);
+
+    }
+}
+
+function showVictory(){
+
+    const overlay =
+        document.getElementById("victoryOverlay");
+
+    const phrase =
+        document.getElementById("finalPhrase");
+
+    if(phrase){
+        phrase.textContent = CODE_PHRASE;
+    }
+
+    if(overlay){
+        overlay.classList.remove("hidden");
+    }
+	
+	launchConfetti();
+}
+
+
+document.getElementById("submitBtn").addEventListener("click",()=>{
+
+    if(submissionLocked){
+		return;
+	}
+
+	submissionLocked = true;
+	
+	if(selected.length!==4){
+        message.innerHTML="Select Exactly Four Tiles.";
+		submissionLocked = false;
+        return;
+    }
+
+    let foundGroup=null;
+
+    groups.forEach((group,index)=>{
+
+        if(solvedGroups.includes(index)){
+			submissionLocked = false;
+            return;
+        }
+
+        const isMatch=
+            group.words.every(word=>selected.includes(word));
+
+        if(isMatch){
+            foundGroup=index;
+        }
+
+    });
+
+    if(foundGroup!==null){
+	
+		animateCorrectTiles().then(()=>{
+
+			revealGroup(foundGroup);
+
+			selected=[];
+
+			message.innerHTML="";
+
+			setTimeout(()=>{
+				renderBoard();
+			},150);
+
+			if(solvedGroups.length===groups.length){
+
+				board.style.display="none";
+				document.querySelector(".controls").style.display="none";
+
+				message.innerHTML=`
+					<div class="win">
+						🌈 Puzzle Complete! 🌈
+					</div>
+				`;
+			startCodePhrasePuzzle();
+			}
+			submissionLocked = false;
+		});
+
+    }else{
+
+        mistakes++;
+        document.getElementById("mistakes").textContent=mistakes;
+
+        let oneAway=false;
+
+        groups.forEach(group=>{
+
+            const count=
+                group.words.filter(
+                    word=>selected.includes(word)
+                ).length;
+
+            if(count===3){
+                oneAway=true;
+            }
+
+        });
+		
+		shakeSelectedTiles();
+
+        if(oneAway){
+            message.innerHTML="🟨 One Away!";
+        }else{
+            message.innerHTML="❌ Not A Group.";
+        }
+		
+		setTimeout(() => {
+			selected = [];
+			renderBoard();
+		}, 1000);
+		submissionLocked = false;
+		
+    }
+
+});
+
+document.getElementById("shuffleBtn").addEventListener("click",()=>{
+
+    const unsolved=
+        allWords.filter(
+            item=>!solvedGroups.includes(item.group)
+        );
+
+    shuffle(unsolved);
+
+    let index=0;
+
+    allWords=allWords.map(item=>{
+
+        if(solvedGroups.includes(item.group)){
+            return item;
+        }
+
+        return unsolved[index++];
+
+    });
+
+    renderBoard();
+
+});
+
+document.getElementById("clearBtn").addEventListener("click",()=>{
+
+    selected = [];
+
+    message.innerHTML = "";
+
+    renderBoard();
+
+});
+
+document.getElementById("hintBtn")
+.addEventListener("click",()=>{
+
+    if(hintsUsed >= MAX_HINTS){
+		return;
+	}
+	
+	const available = groups
+        .map((group,index)=>({group,index}))
+        .filter(item =>
+            !solvedGroups.includes(item.index) &&
+            !usedHintGroups.has(item.index)
+        );
+
+    if(!available.length){
+
+        message.innerHTML =
+            "💡 No Unused Hints Remaining. 💡";
+		
+		const hintButton =
+			document.getElementById("hintBtn");
+
+		hintButton.disabled = true;
+		hintButton.textContent = "No Unused Hints Left";
+		
+        return;
+    }
+
+    const chosen =
+        available[
+            Math.floor(
+                Math.random()*available.length
+            )
+        ];
+
+    const words = [...chosen.group.words];
+
+    shuffle(words);
+
+    const pair = words.slice(0,2);
+
+    hintedGroups.set(
+        chosen.index,
+        pair
+    );
+
+    usedHintGroups.add(
+        chosen.index
+    );
+	
+	hintsUsed++;
+	
+	if(hintsUsed >= MAX_HINTS){
+
+		const hintButton =
+			document.getElementById("hintBtn");
+
+		hintButton.disabled = true;
+		hintButton.textContent = "No Hints Left";
+	}
+	
+	updateHintCounters();
+
+    message.innerHTML =
+        "💡 Two Related Tiles Have Been Highlighted. 💡";
+
+    renderBoard();
+
+});
+
+const admireBtn =
+    document.getElementById("admireBtn");
+
+if(admireBtn){
+
+    admireBtn.addEventListener("click",()=>{
+
+        const overlay =
+            document.getElementById("victoryOverlay");
+
+        if(overlay){
+            overlay.classList.add("hidden");
+        }
+
+    });
+
+}
+
+document.addEventListener("keydown",(event)=>{
+
+    const codePuzzle =
+        document.getElementById("codePuzzle");
+
+    if(
+        !codePuzzle ||
+        codePuzzle.style.display === "none"
+    ){
+        return;
+    }
+	
+	const letter = event.key.toUpperCase();
+
+    if(/^[A-Z]$/.test(letter)){
+        pressLetter(letter);
+    }
+
+    if(event.key === "Backspace"){
+        deleteLetter();
+    }
+
+    if(event.key === "Enter"){
+        submitCodePhrase();
+    }
+
+});
+
+function launchConfetti(){
+
+    const canvas=document.getElementById("confettiCanvas");
+    const ctx=canvas.getContext("2d");
+
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+
+    const colors=[
+        "#538d4e",
+        "#b59f3b",
+        "#ff4d6d",
+        "#4cc9f0",
+        "#f4c542",
+        "#9b5de5"
+    ];
+
+    const pieces=[];
+
+    for(let i=0;i<250;i++){
+
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:-Math.random()*canvas.height,
+            size:5+Math.random()*10,
+            color:colors[Math.floor(Math.random()*colors.length)],
+            speed:2+Math.random()*5,
+            drift:-2+Math.random()*4,
+            rotation:Math.random()*360,
+            spin:-5+Math.random()*10
+        });
+    }
+
+    let frame=0;
+
+    function animate(){
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        pieces.forEach(p=>{
+
+            p.y+=p.speed;
+            p.x+=p.drift;
+            p.rotation+=p.spin;
+
+            ctx.save();
+
+            ctx.translate(p.x,p.y);
+            ctx.rotate(p.rotation*Math.PI/180);
+
+            ctx.fillStyle=p.color;
+            ctx.fillRect(
+                -p.size/2,
+                -p.size/2,
+                p.size,
+                p.size
+            );
+
+            ctx.restore();
+        });
+
+        frame++;
+
+        if(frame<300){
+            requestAnimationFrame(animate);
+        }else{
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        }
+    }
+
+    animate();
+}
+
+renderBoard();
+updateHintCounters();
+
+</script>
+</body>
+</html>
