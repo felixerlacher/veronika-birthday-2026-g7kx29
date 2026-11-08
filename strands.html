@@ -93,27 +93,19 @@ h1{
 }
 
 #grid{
-	--size:min(52px, 11vw);
 
+    --size:52px;
     --gap:4px;
 
     display:grid;
+
     grid-template-columns:
-        repeat(8,var(--size));
+        repeat(8, var(--size));
 
     gap:var(--gap);
- );
 
- --gap:max(2px, calc(var(--size) * 0.12));
- display:grid;
- grid-template-columns:
-  repeat(8, var(--size));
- gap:var(--gap);
- justify-content:center;
- margin:auto;
-
- position:relative;
- z-index:2;
+    position:relative;
+    z-index:2;
 }
 
 #pathOverlay{
@@ -408,7 +400,6 @@ button:disabled{
     cursor:not-allowed;
 }
 
-.cell.found,
 .cell.spanagram{
     animation:foundPop .25s ease-out;
 }
