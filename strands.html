@@ -17,13 +17,16 @@
 
 body{
  margin:0;
- padding:20px;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
  background:var(--bg);
  color:#222;
  text-align:center;
  overflow-x:hidden;
  animation:pageFade .8s ease-out;
+}
+
+#pageContent{
+    padding:20px;
 }
 
 @keyframes pageFade{
@@ -83,11 +86,9 @@ h1{
     position:relative;
     width:fit-content;
     margin:0 auto;
-	outline:3px solid red;
 }
 
 #grid{
-	outline:3px solid blue;
 	--size:min(52px, 11vw);
 
     --gap:4px;
@@ -432,47 +433,49 @@ button:disabled{
 </head>
 <body>
 
-<h1>STRANDS</h1>
-
-<div class="clue">
-A Trip to Remember
-</div>
-
-<div id="statusBar">
-    <div id="wordsCounter">🔍 Theme Words Found: 0/12</div>
-    <div id="hintCounter">💡 Hints Used: 0</div>
-</div>
-
-<div id="boardWrapper">
- <svg id="pathOverlay"></svg>
- <div id="grid"></div>
-</div>
-
-<div class="bottom-controls">
- <button id="hintBtn">Hint</button>
-</div>
-
-<div id="feedbackBar"></div>
-
-<div id="words"></div>
-
-<div id="victory">
-🎉 Puzzle Complete! 🎉
-</div>
-
-<div id="completionModal" class="modal">
-
-  <div class="modal-content">
-	<canvas id="confettiCanvas"></canvas>
-    <h2>🎉 Congratulations! 🎉</h2>
-    <p>
-      You Found Every Theme Word And The Spanagram.
-    </p>
-    <button id="admireBtn">
-      ✨ Admire Puzzle ✨
-    </button>
-  </div>
-
+<div id="pageContent">
+	<h1>STRANDS</h1>
+	
+	<div class="clue">
+	A Trip to Remember
+	</div>
+	
+	<div id="statusBar">
+	    <div id="wordsCounter">🔍 Theme Words Found: 0/12</div>
+	    <div id="hintCounter">💡 Hints Used: 0</div>
+	</div>
+	
+	<div id="boardWrapper">
+	 <svg id="pathOverlay"></svg>
+	 <div id="grid"></div>
+	</div>
+	
+	<div class="bottom-controls">
+	 <button id="hintBtn">Hint</button>
+	</div>
+	
+	<div id="feedbackBar"></div>
+	
+	<div id="words"></div>
+	
+	<div id="victory">
+	🎉 Puzzle Complete! 🎉
+	</div>
+	
+	<div id="completionModal" class="modal">
+	
+	  <div class="modal-content">
+		<canvas id="confettiCanvas"></canvas>
+	    <h2>🎉 Congratulations! 🎉</h2>
+	    <p>
+	      You Found Every Theme Word And The Spanagram.
+	    </p>
+	    <button id="admireBtn">
+	      ✨ Admire Puzzle ✨
+	    </button>
+	  </div>
+	
+	</div>
 </div>
 
 <script>
