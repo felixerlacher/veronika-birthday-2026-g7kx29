@@ -242,6 +242,7 @@ button{
 
     body{
         padding:10px;
+		background:red !important;
     }
 
     .board{
@@ -285,7 +286,7 @@ button{
 	
     #keyboard{
         width:100%;
-        max-width:420px;
+        max-width:100%;
         gap:4px;
     }
 
@@ -297,14 +298,18 @@ button{
         flex:1;
         min-width:0;
         max-width:none;
-        height:46px;
-        font-size:14px;
+		margin:0;
+		padding:0;
+        height:42px;
+        font-size:12px;
     }
 
     .wide-key{
         flex:1.4;
         min-width:0;
-        font-size:10px;
+		margin:0;
+		padding:0;
+        font-size:9px;
     }
 	
 	.letterBox{
@@ -609,7 +614,11 @@ body{
 }
 
 .key{
-    min-width:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+	min-width:42px;
     height:58px;
     border:none;
 	padding:1px 6px;
