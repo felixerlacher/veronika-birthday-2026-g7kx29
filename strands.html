@@ -86,10 +86,15 @@ h1{
 }
 
 #grid{
- --size:min(
-  calc((100vw - 40px) / 8.5),
-  calc((100vh - 260px) / 10.5),
-  56px
+	--size:min(52px, 11vw);
+
+    --gap:4px;
+
+    display:grid;
+    grid-template-columns:
+        repeat(8,var(--size));
+
+    gap:var(--gap);
  );
 
  --gap:max(2px, calc(var(--size) * 0.12));
