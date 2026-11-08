@@ -242,7 +242,6 @@ button{
 
     body{
         padding:10px;
-		background:red !important;
     }
 
     .board{
@@ -285,31 +284,38 @@ button{
     }
 	
     #keyboard{
-        width:100%;
         max-width:100%;
-        gap:4px;
     }
 
     .keyboard-row{
-        gap:3px;
+        display:flex;
+        justify-content:center;
+		gap:2px;
     }
 
     .key{
-        flex:1;
-        min-width:0;
-        max-width:none;
-		margin:0;
-		padding:0;
-        height:42px;
-        font-size:12px;
+        width:8vw;
+        min-width:28px;
+        max-width:38px;
+
+        height:48px;
+
+        margin:0;
+        padding:0;
+
+        font-size:14px;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
     }
 
     .wide-key{
-        flex:1.4;
-        min-width:0;
-		margin:0;
-		padding:0;
-        font-size:9px;
+        width:14vw;
+        min-width:48px;
+        max-width:62px;
+
+        font-size:10px;
     }
 	
 	.letterBox{
@@ -621,7 +627,7 @@ body{
 	min-width:42px;
     height:58px;
     border:none;
-	padding:1px 6px;
+	// padding:1px 6px;
     border-radius:4px;
     background:#818384;
     color:white;
