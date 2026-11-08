@@ -146,6 +146,18 @@ h1{
 
 .cell.found{
  color:white;
+ animation:
+	foundPop .25s ease-out,
+	softGlow 3s ease-in-out infinite;
+}
+
+@keyframes softGlow{
+    0%,100%{
+        filter:brightness(1);
+    }
+    50%{
+        filter:brightness(1.08);
+    }
 }
 
 .cell.spanagram{
@@ -162,8 +174,9 @@ h1{
  color:white;
 
  box-shadow:
- 0 0 8px rgba(255,215,0,.6),
- 0 0 16px rgba(255,215,0,.3);
+    0 0 10px rgba(255,215,0,.7),
+    0 0 20px rgba(255,215,0,.45),
+    0 0 32px rgba(255,215,0,.25);
 
  animation:goldSparkle 2s linear infinite;
 }
@@ -601,10 +614,12 @@ function createSvgPath(cells,color){
  path.setAttribute("class","path-line");
 
  path.style.stroke=color;
+ path.style.filter =
+    `drop-shadow(0 0 4px ${color})`;
 
  if(color==="#F3C84B"){
   path.style.filter=
-   "drop-shadow(0 0 4px gold)";
+   "drop-shadow(0 0 6px gold)";
  }
 
  return path;
@@ -778,6 +793,9 @@ function finishSelection(){
 
     cell.style.background=color;
     cell.style.borderColor=color;
+	cell.style.boxShadow =
+	    `0 0 8px ${color}66,
+	     0 0 16px ${color}33`;
    }
   });
 
