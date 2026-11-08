@@ -288,22 +288,17 @@ button{
     }
 
     .keyboard-row{
-        display:flex;
-        justify-content:center;
-		gap:2px;
+        gap:2px;
     }
 
     .key{
-        width:8vw;
-        min-width:28px;
-        max-width:38px;
+        flex:1 1 0;
+        min-width:0;
 
         height:48px;
 
-        margin:0;
         padding:0;
-
-        font-size:14px;
+        margin:0;
 
         display:flex;
         align-items:center;
@@ -311,11 +306,7 @@ button{
     }
 
     .wide-key{
-        width:14vw;
-        min-width:48px;
-        max-width:62px;
-
-        font-size:10px;
+        flex:1.5 1 0;
     }
 	
 	.letterBox{
