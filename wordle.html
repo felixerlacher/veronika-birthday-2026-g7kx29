@@ -492,12 +492,12 @@ function saveGame(){
 
         hintedLetters: [...hintedLetters],
 
-        keyboardColors: [...document.querySelectorAll(".key")]
-            .map(key => ({
-                letter: key.textContent,
-                color: key.style.background || "",
-                hinted: key.classList.contains("hinted")
-            })),
+        keyboardKeys: [...document.querySelectorAll(".key")]
+		    .map(key => ({
+		        letter: key.textContent,
+		        color: getComputedStyle(key).backgroundColor,
+		        hinted: key.classList.contains("hinted")
+		    })),
 
         board: [...document.querySelectorAll(".tile")]
             .map(tile => ({
@@ -559,7 +559,7 @@ function loadGame(){
 
         if(!key) return;
 
-        key.style.background = saved.color;
+        key.style.backgroundColor = saved.color;
 
         if(saved.hinted){
             key.classList.add("hinted");
