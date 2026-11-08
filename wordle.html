@@ -401,7 +401,7 @@ h1{
             ✨ Admire Puzzle ✨
         </button>
 
-        <button id="playAgainBtn" onclick="location.reload()">
+        <button id="playAgainBtn" onclick="resetGame()">
             Play Again
         </button>
     </div>
@@ -482,6 +482,103 @@ keyboardRows.forEach(def=>{
     keyboard.appendChild(row);
 });
 
+function saveGame(){
+
+    const saveData = {
+        currentRow,
+        currentGuess,
+        gameOver,
+        hintsRemaining,
+
+        hintedLetters: [...hintedLetters],
+
+        keyboardColors: [...document.querySelectorAll(".key")]
+            .map(key => ({
+                letter: key.textContent,
+                color: key.style.background || "",
+                hinted: key.classList.contains("hinted")
+            })),
+
+        board: [...document.querySelectorAll(".tile")]
+            .map(tile => ({
+                text: tile.textContent,
+                classes: [...tile.classList]
+            }))
+    };
+
+    localStorage.setItem(
+        "datenightWordle",
+        JSON.stringify(saveData)
+    );
+}
+
+function loadGame(){
+
+    const saveData =
+        localStorage.getItem("datenightWordle");
+
+    if(!saveData){
+        return;
+    }
+
+    const data = JSON.parse(saveData);
+
+    currentRow = data.currentRow;
+    currentGuess = data.currentGuess;
+    gameOver = data.gameOver;
+    hintsRemaining = data.hintsRemaining;
+
+    hintedLetters.clear();
+
+    data.hintedLetters.forEach(letter => {
+        hintedLetters.add(letter);
+    });
+
+    const tiles =
+        document.querySelectorAll(".tile");
+
+    data.board.forEach((savedTile,index)=>{
+
+        tiles[index].textContent =
+            savedTile.text;
+
+        tiles[index].className = "";
+
+        savedTile.classes.forEach(cls=>{
+            tiles[index].classList.add(cls);
+        });
+    });
+
+    data.keyboardColors.forEach(saved=>{
+
+        const key =
+            [...document.querySelectorAll(".key")]
+            .find(
+                k => k.textContent === saved.letter
+            );
+
+        if(!key) return;
+
+        key.style.background = saved.color;
+
+        if(saved.hinted){
+            key.classList.add("hinted");
+        }
+    });
+
+    updateHintButton();
+    updateStatusBar();
+}
+
+function resetGame(){
+
+    localStorage.removeItem(
+        "datenightWordle"
+    );
+
+    location.reload();
+}
+	
 function createKey(label,large,row){
 
     const key=document.createElement("button");
@@ -502,18 +599,21 @@ function handleKey(key){
 
     if(key==="ENTER"){
         submitGuess();
+		saveGame();
         return;
     }
 
     if(key==="⌫"){
         currentGuess=currentGuess.slice(0,-1);
         drawGuess();
+		saveGame();
         return;
     }
 
     if(currentGuess.length<WORD_LENGTH){
         currentGuess+=key;
         drawGuess();
+		saveGame();
     }
 }
 
@@ -629,6 +729,7 @@ function submitGuess(){
     }
 	
 	currentRow++;
+	saveGame();
 	updateStatusBar();
 
     if(currentGuess===ANSWER){
@@ -680,7 +781,8 @@ function updateKeyboard(letter,state){
 
 function finishGame(won){
 
-    gameOver=true;
+    saveGame();
+	gameOver=true;
 	const guessesUsed = currentRow;
 
     document.getElementById("overlay").style.display="flex";
@@ -863,6 +965,7 @@ function giveHint(){
     }
 	
 	hintsRemaining--;
+	saveGame();
 	updateHintButton();
 	updateStatusBar();
 
@@ -912,6 +1015,7 @@ window.addEventListener("resize",()=>{
     canvas.height=window.innerHeight;
 });
 
+loadGame();
 updateHintButton();
 updateStatusBar();
 
