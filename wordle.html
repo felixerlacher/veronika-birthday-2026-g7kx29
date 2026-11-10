@@ -441,9 +441,14 @@ for(let r=0;r<MAX_ROWS;r++){
 
         const tile=document.createElement("div");
         tile.className="tile";
-
-        row.appendChild(tile);
-    }
+		savedTile.classes.forEach(cls => {
+		
+		    if(cls === "flip") return;
+		
+		    tile.classList.add(cls);
+		
+		        row.appendChild(tile);
+		    }
 
     board.appendChild(row);
 }
@@ -1015,9 +1020,9 @@ window.addEventListener("resize",()=>{
     canvas.height=window.innerHeight;
 });
 
-loadGame();
 updateHintButton();
 updateStatusBar();
+loadGame();
 
 </script>
 </body>
