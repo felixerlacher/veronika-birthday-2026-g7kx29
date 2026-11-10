@@ -441,14 +441,9 @@ for(let r=0;r<MAX_ROWS;r++){
 
         const tile=document.createElement("div");
         tile.className="tile";
-		savedTile.classes.forEach(cls => {
-		
-		    if(cls === "flip") return;
-		
-		    tile.classList.add(cls);
-		
-		        row.appendChild(tile);
-		    }
+
+        row.appendChild(tile);
+    }
 
     board.appendChild(row);
 }
@@ -554,7 +549,7 @@ function loadGame(){
         });
     });
 
-    data.keyboardColors.forEach(saved=>{
+    data.keyboardKeys.forEach(saved=>{
 
         const key =
             [...document.querySelectorAll(".key")]
